@@ -44,7 +44,6 @@ function Scene3D() {
     <>
       <CameraRig />
 
-      {/* Industrial Lighting */}
       <ambientLight intensity={0.4} color="#ffd4a3" />
       <directionalLight 
         position={[5, 8, 5]} 
@@ -56,7 +55,6 @@ function Scene3D() {
       <pointLight position={[-4, 3, 2]} intensity={1.5} color="#ffffff" />
       <pointLight position={[4, 3, 2]} intensity={1.5} color="#ffffff" />
 
-      {/* Ceiling Fluorescent Fixtures */}
       <group position={[0, 4.8, 2]}>
         <mesh position={[-2, 0, 0]}>
           <boxGeometry args={[1.5, 0.1, 0.4]} />
@@ -84,34 +82,29 @@ function Scene3D() {
       <FrontBurners />
       
       <group position={[0, 0, 6]}>
-        {/* Back Prep Station */}
         <group>
-            {/* Stainless Steel Backsplash/Wall */}
             <mesh position={[0, 1.5, 0.45]} receiveShadow>
                 <boxGeometry args={[6, 3, 0.1]} />
                 <meshStandardMaterial color="#999" roughness={0.2} metalness={0.8} />
             </mesh>
             
-            {/* Countertop - Industrial Grade */}
             <mesh position={[0, 0.8, 0]} receiveShadow>
                 <boxGeometry args={[6, 0.05, 1.0]} />
                 <meshStandardMaterial color="#888" roughness={0.2} metalness={0.9} />
             </mesh>
             
-            {/* Base Cabinet */}
-            <mesh position={[0, 0.4, 0]} receiveShadow>
+            <mesh position={[0, 0.4, 0.45]} receiveShadow>
                 <boxGeometry args={[6, 0.8, 0.9]} />
-                <meshStandardMaterial color="#777" roughness={0.3} metalness={0.7} />
+                <meshStandardMaterial color="#666" roughness={0.4} metalness={0.6} />
             </mesh>
 
-            {/* Pipes/Conduits */}
-            <mesh position={[-2.8, 2.5, 0.35]} rotation={[0, 0, Math.PI / 2]}>
+            <mesh position={[0, 2.5, 0.35]} rotation={[0, 0, Math.PI / 2]}>
               <cylinderGeometry args={[0.03, 0.03, 6, 16]} />
-              <meshStandardMaterial color="#666" metalness={1} roughness={0.3} />
+              <meshStandardMaterial color="#555" metalness={1} roughness={0.4} />
             </mesh>
-            <mesh position={[-2.8, 2.3, 0.35]} rotation={[0, 0, Math.PI / 2]}>
+            <mesh position={[0, 2.3, 0.35]} rotation={[0, 0, Math.PI / 2]}>
               <cylinderGeometry args={[0.02, 0.02, 6, 16]} />
-              <meshStandardMaterial color="#666" metalness={1} roughness={0.3} />
+              <meshStandardMaterial color="#555" metalness={1} roughness={0.4} />
             </mesh>
         </group>
 
@@ -121,7 +114,6 @@ function Scene3D() {
 
         <Sink position={[1.8, 0, 0]} rotation={[0, Math.PI, 0]} />
 
-        {/* Clutter: Stacked Trays */}
         <group position={[-0.8, 0.825, 0.1]} rotation={[0, 0.1, 0]}>
           {[0, 0.015, 0.03, 0.045].map((y) => (
             <mesh key={y} position={[0, y, 0]}>
@@ -131,7 +123,6 @@ function Scene3D() {
           ))}
         </group>
 
-        {/* Clutter: Spice Containers */}
         <group position={[0.7, 0.825, -0.2]}>
           <mesh position={[0, 0.05, 0]}>
             <cylinderGeometry args={[0.04, 0.04, 0.1, 16]} />
@@ -150,50 +141,46 @@ function Scene3D() {
       <Clock />
       <Counter />
 
-      {/* Floor: Commercial Non-slip Tiles */}
       <mesh rotation={[-Math.PI / 2, 0, 0]} position={[0, 0, 0]} receiveShadow>
         <planeGeometry args={[40, 40]} />
-        <meshStandardMaterial color="#4a2c2a" roughness={0.8} metalness={0.1} />
+        <meshStandardMaterial color="#3a1c1a" roughness={0.9} metalness={0.05} />
       </mesh>
-      {/* Floor Grid Pattern */}
-      <gridHelper args={[40, 40, "#222", "#333"]} position={[0, 0.001, 0]} />
+      <gridHelper args={[40, 20, "#111", "#1a1a1a"]} position={[0, 0.001, 0]} />
 
-      {/* Walls */}
-      {/* Back Wall */}
       <group position={[0, 5, -5]}>
-        {/* Bottom Half: Stainless */}
-        <mesh position={[0, -3, 0]}>
-          <planeGeometry args={[40, 4]} />
-          <meshStandardMaterial color="#888" metalness={0.8} roughness={0.2} />
+        <mesh position={[0, -3.5, 0]}>
+          <planeGeometry args={[40, 3]} />
+          <meshStandardMaterial color="#777" metalness={0.9} roughness={0.3} />
         </mesh>
-        {/* Top Half: Subway Tiles */}
-        <mesh position={[0, 1, 0]}>
-          <planeGeometry args={[40, 4]} />
-          <meshStandardMaterial color="#eee" roughness={0.3} />
+        <mesh position={[0, 0.5, 0]}>
+          <planeGeometry args={[40, 5]} />
+          <meshStandardMaterial color="#ddd" roughness={0.2} />
+        </mesh>
+        <mesh position={[0, -2, 0.01]}>
+          <boxGeometry args={[40, 0.05, 0.05]} />
+          <meshStandardMaterial color="#555" metalness={1} roughness={0.2} />
         </mesh>
       </group>
 
-      {/* Left Wall */}
       <group position={[-10, 5, 3.5]} rotation={[0, Math.PI / 2, 0]}>
-        <mesh position={[0, -3, 0]}>
-          <planeGeometry args={[17, 4]} />
-          <meshStandardMaterial color="#888" metalness={0.8} roughness={0.2} />
+        <mesh position={[0, -3.5, 0]}>
+          <planeGeometry args={[20, 3]} />
+          <meshStandardMaterial color="#777" metalness={0.9} roughness={0.3} />
         </mesh>
-        <mesh position={[0, 1, 0]}>
-          <planeGeometry args={[17, 4]} />
-          <meshStandardMaterial color="#eee" roughness={0.3} />
+        <mesh position={[0, 0.5, 0]}>
+          <planeGeometry args={[20, 5]} />
+          <meshStandardMaterial color="#ddd" roughness={0.2} />
         </mesh>
       </group>
 
-      {/* Right Wall */}
       <group position={[10, 5, 3.5]} rotation={[0, -Math.PI / 2, 0]}>
-        <mesh position={[0, -3, 0]}>
-          <planeGeometry args={[17, 4]} />
-          <meshStandardMaterial color="#888" metalness={0.8} roughness={0.2} />
+        <mesh position={[0, -3.5, 0]}>
+          <planeGeometry args={[20, 3]} />
+          <meshStandardMaterial color="#777" metalness={0.9} roughness={0.3} />
         </mesh>
-        <mesh position={[0, 1, 0]}>
-          <planeGeometry args={[17, 4]} />
-          <meshStandardMaterial color="#eee" roughness={0.3} />
+        <mesh position={[0, 0.5, 0]}>
+          <planeGeometry args={[20, 5]} />
+          <meshStandardMaterial color="#ddd" roughness={0.2} />
         </mesh>
       </group>
     </>

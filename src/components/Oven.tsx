@@ -51,7 +51,7 @@ export function Oven({ position = [0, 0.22, 0.58] }: { position?: [number, numbe
   }
 
   return (
-    <group position={position}>
+    <group position={position} onClick={() => !ovenTask && useStore.getState().setModalOpen(true)} onPointerOver={() => !ovenTask && (document.body.style.cursor = 'pointer')} onPointerOut={() => (document.body.style.cursor = 'auto')}>
       <mesh position={[0, 0, -0.15]}>
         <boxGeometry args={[1.45, 0.35, 0.2]} />
         <meshStandardMaterial color="#050505" roughness={0.9} metalness={0.1} />

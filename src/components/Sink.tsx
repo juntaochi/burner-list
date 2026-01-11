@@ -45,12 +45,24 @@ export function Sink(props: ThreeElements['group']) {
         </mesh>
 
         <group position={[0, 0.07, 0]}>
-          <mesh position={[0, 0.1, 0]} castShadow>
-            <cylinderGeometry args={[0.025, 0.025, 0.2, 16]} />
+          <mesh position={[0, 0.05, 0]} castShadow>
+            <cylinderGeometry args={[0.025, 0.025, 0.1, 16]} />
+            {chromeMaterial}
+          </mesh>
+          <mesh position={[0, 0.15, 0]} castShadow>
+            <cylinderGeometry args={[0.025, 0.025, 0.1, 16]} />
+            {chromeMaterial}
+          </mesh>
+          <mesh position={[0, 0.2, 0]} castShadow>
+            <sphereGeometry args={[0.025, 16, 16]} />
             {chromeMaterial}
           </mesh>
           <mesh position={[0, 0.2, -0.05]} rotation={[0, 0, 0]} castShadow>
             <torusGeometry args={[0.05, 0.025, 16, 32, Math.PI]} />
+            {chromeMaterial}
+          </mesh>
+          <mesh position={[0, 0.2, -0.1]} castShadow>
+            <sphereGeometry args={[0.025, 16, 16]} />
             {chromeMaterial}
           </mesh>
           <group position={[0, 0.2, -0.1]}>
@@ -59,8 +71,8 @@ export function Sink(props: ThreeElements['group']) {
               {chromeMaterial}
             </mesh>
             <mesh position={[0, -0.12, 0]}>
-              <cylinderGeometry args={[0.027, 0.027, 0.02, 16]} />
-              <meshStandardMaterial color="#333333" metalness={0.8} roughness={0.2} />
+              <cylinderGeometry args={[0.028, 0.028, 0.03, 16]} />
+              <meshStandardMaterial color="#222" metalness={0.9} roughness={0.1} />
             </mesh>
           </group>
         </group>
@@ -110,4 +122,3 @@ export function Sink(props: ThreeElements['group']) {
     </group>
   )
 }
-

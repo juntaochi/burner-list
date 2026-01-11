@@ -15,6 +15,19 @@ export function FrontBurners() {
 
   return (
     <group>
+      {BURNER_POSITIONS.map((pos, i) => (
+        <group 
+          key={`burner-${i}`} 
+          position={pos} 
+          onClick={() => useStore.getState().setModalOpen(true)}
+          onPointerOver={() => (document.body.style.cursor = 'pointer')}
+          onPointerOut={() => (document.body.style.cursor = 'auto')}
+        >
+          <mesh visible={false}>
+            <cylinderGeometry args={[0.25, 0.25, 0.1, 16]} />
+          </mesh>
+        </group>
+      ))}
       {frontTasks.map((task) => (
         <Pan
           key={task.id}

@@ -55,14 +55,14 @@ export function BackBurner(props: ThreeElements['group']) {
   return (
     <group ref={potRef} {...props}>
       <mesh 
-        position={[0, -0.08, 0]} 
+        position={[0, -0.065, 0]} 
         castShadow 
         receiveShadow 
-        onClick={() => useStore.getState().setModalOpen(true)}
+        onClick={(e) => { e.stopPropagation(); useStore.getState().setModalOpen(true); }}
         onPointerOver={() => (document.body.style.cursor = 'pointer')}
         onPointerOut={() => (document.body.style.cursor = 'auto')}
       >
-        <cylinderGeometry args={[0.22, 0.22, 0.02, 32]} />
+        <cylinderGeometry args={[0.22, 0.22, 0.05, 32]} />
         {darkSteelMaterial}
       </mesh>
 
@@ -128,7 +128,7 @@ export function BackBurner(props: ThreeElements['group']) {
             ))}
           </group>
 
-          <group position={[0.4, -0.05, 0.3]} rotation={[0.2, 0, 0.3]}>
+          <group position={[0.4, -0.05, 0.25]} rotation={[0.2, 0, 0.3]} onClick={(e) => { e.stopPropagation(); useStore.getState().setModalOpen(true); }} onPointerOver={() => (document.body.style.cursor = 'pointer')} onPointerOut={() => (document.body.style.cursor = 'auto')}>
             <mesh castShadow receiveShadow>
               <cylinderGeometry args={[0.23, 0.23, 0.02, 32]} />
               {steelMaterial}
@@ -157,7 +157,7 @@ export function BackBurner(props: ThreeElements['group']) {
       )}
 
       {!backTask && (
-        <group position={[0, 0.11, 0]}>
+        <group position={[0, 0.11, 0]} onClick={(e) => { e.stopPropagation(); useStore.getState().setModalOpen(true); }} onPointerOver={() => (document.body.style.cursor = 'pointer')} onPointerOut={() => (document.body.style.cursor = 'auto')}>
           <mesh castShadow receiveShadow>
             <cylinderGeometry args={[0.23, 0.23, 0.02, 32]} />
             {steelMaterial}

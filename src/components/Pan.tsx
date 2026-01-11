@@ -116,7 +116,7 @@ export function Pan({ task, position, onComplete }: PanProps) {
   const hudClassName = `timer-hud ${taskState === 'critical' ? 'critical' : ''} ${taskState === 'burnt' ? 'burnt' : ''}`
 
   return (
-    <group position={position}>
+    <group position={position} onClick={() => onComplete()} onPointerOver={() => (document.body.style.cursor = 'pointer')} onPointerOut={() => (document.body.style.cursor = 'auto')}>
       <mesh ref={meshRef} castShadow receiveShadow>
         <cylinderGeometry args={[0.185, 0.15, 0.06, 32]} />
         <primitive object={exteriorMaterial} attach="material" />
