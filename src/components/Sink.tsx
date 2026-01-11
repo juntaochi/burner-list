@@ -1,7 +1,12 @@
 import type { ThreeElements } from '@react-three/fiber'
-import { RoundedBox } from '@react-three/drei'
+import { RoundedBox, Html } from '@react-three/drei'
+import { useShallow } from 'zustand/shallow'
+import { useStore, selectSinkTasks } from '../store/useStore'
 
 export function Sink(props: ThreeElements['group']) {
+  const sinkTasks = useStore(useShallow(selectSinkTasks))
+  const completeTask = useStore((state) => state.completeTask)
+
   const chromeMaterial = (
     <meshStandardMaterial color="#ffffff" metalness={1} roughness={0.05} envMapIntensity={1.5} />
   )
@@ -19,6 +24,9 @@ export function Sink(props: ThreeElements['group']) {
         position={[0, 0.84, 0]}
         castShadow
         receiveShadow
+        onClick={() => sinkTasks.length > 0 && completeTask(sinkTasks[0].id)}
+        onPointerOver={() => sinkTasks.length > 0 && (document.body.style.cursor = 'pointer')}
+        onPointerOut={() => (document.body.style.cursor = 'auto')}
       >
         {sinkMaterial}
       </RoundedBox>
@@ -119,6 +127,43 @@ export function Sink(props: ThreeElements['group']) {
           envMapIntensity={2.0}
         />
       </mesh>
+
+      {sinkTasks.length > 0 && (
+        <Html position={[0, 1.1, 0]} center distanceFactor={10}>
+          <div className="flex flex-col gap-2 pointer-events-none">
+            {sinkTasks.slice(0, 3).map((task, idx) => (
+              <div
+                key={task.id}
+                onClick={(e) => {
+                  e.stopPropagation()
+                  completeTask(task.id)
+                }}
+                className="pointer-events-auto cursor-pointer group"
+              >
+                <div 
+                  className="bg-sky-900/80 backdrop-blur-md border border-sky-400/50 px-3 py-1.5 rounded-sm shadow-lg
+                             transform transition-all duration-200 hover:scale-105 hover:bg-sky-800/90 hover:border-sky-300"
+                  style={{
+                    boxShadow: '0 0 15px rgba(56, 189, 248, 0.2)',
+                    minWidth: '100px'
+                  }}
+                >
+                  <div className="text-[10px] uppercase tracking-widest text-sky-300 font-bold mb-0.5">Sink Duty</div>
+                  <div className="text-sm text-white font-medium flex items-center justify-between">
+                    <span>{task.title}</span>
+                    {idx === 0 && <span className="ml-2 w-2 h-2 rounded-full bg-sky-400 animate-pulse" />}
+                  </div>
+                </div>
+              </div>
+            ))}
+            {sinkTasks.length > 3 && (
+              <div className="text-[10px] text-sky-300/80 text-center font-bold uppercase">
+                + {sinkTasks.length - 3} more
+              </div>
+            )}
+          </div>
+        </Html>
+      )}
     </group>
   )
 }

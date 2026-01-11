@@ -33,8 +33,11 @@ function StartOverlay() {
 
   return (
     <div className="start-overlay" onClick={unlockAudio}>
-      <h1>THE LINE</h1>
-      <p>Click anywhere to start your shift</p>
+      <div className="start-content">
+        <h1>THE LINE</h1>
+        <p className="tagline">Manage your task like a master chef</p>
+        <p className="instruction">Click anywhere to start your shift</p>
+      </div>
     </div>
   )
 }

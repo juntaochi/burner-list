@@ -151,6 +151,7 @@ export const useStore = create<Store>()((set, get) => ({
 export const selectFrontTasks = (state: Store) => state.tasks.filter((t) => t.type === 'front')
 export const selectBackTasks = (state: Store) => state.tasks.filter((t) => t.type === 'back')
 export const selectOvenTasks = (state: Store) => state.tasks.filter((t) => t.type === 'oven')
+export const selectSinkTasks = (state: Store) => state.tasks.filter((t) => t.type === 'sink')
 export const selectNoteTasks = (state: Store) => state.tasks.filter((t) => t.type === 'note')
 export const selectTasks = (state: Store) => state.tasks
 export const selectCompleteTask = (state: Store) => state.completeTask

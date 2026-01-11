@@ -17,10 +17,10 @@ export function Oven({ position = [0, 0.22, 0.58] }: { position?: [number, numbe
   useFrame((state) => {
     if (ovenTask) {
       const progress = calculateBurnProgress(ovenTask)
-      const baseIntensity = 1.5
+      const baseIntensity = 3.0
 
       if (progress > 0.8 && lightRef.current) {
-        lightRef.current.intensity = baseIntensity + Math.sin(state.clock.elapsedTime * 10) * 0.5
+        lightRef.current.intensity = baseIntensity + Math.sin(state.clock.elapsedTime * 10) * 1.5
       } else if (lightRef.current) {
         lightRef.current.intensity = baseIntensity
       }
@@ -36,10 +36,10 @@ export function Oven({ position = [0, 0.22, 0.58] }: { position?: [number, numbe
       }
 
       if (glassRef.current) {
-        glassRef.current.emissiveIntensity = 0.2 + Math.sin(state.clock.elapsedTime * 2) * 0.1
+        glassRef.current.emissiveIntensity = 0.4 + Math.sin(state.clock.elapsedTime * 2) * 0.2
       }
     } else if (glassRef.current) {
-      glassRef.current.emissiveIntensity = 0
+      glassRef.current.emissiveIntensity = 0.05
     }
   })
 
@@ -51,23 +51,34 @@ export function Oven({ position = [0, 0.22, 0.58] }: { position?: [number, numbe
   }
 
   return (
-    <group position={position} onClick={() => !ovenTask && useStore.getState().setModalOpen(true)} onPointerOver={() => !ovenTask && (document.body.style.cursor = 'pointer')} onPointerOut={() => (document.body.style.cursor = 'auto')}>
+    <group 
+      position={position} 
+      onClick={(e) => {
+        e.stopPropagation()
+        if (ovenTask) {
+          completeTask(ovenTask.id)
+        } else {
+          useStore.getState().setModalOpen(true)
+        }
+      }} 
+      onPointerOver={() => (document.body.style.cursor = 'pointer')} 
+      onPointerOut={() => (document.body.style.cursor = 'auto')}
+    >
       <mesh position={[0, 0, -0.15]}>
-        <boxGeometry args={[1.45, 0.35, 0.2]} />
-        <meshStandardMaterial color="#050505" roughness={0.9} metalness={0.1} />
+        <boxGeometry args={[1.5, 0.45, 0.3]} />
+        <meshStandardMaterial color="#0a0a0a" roughness={0.4} metalness={0.8} />
       </mesh>
 
-      <group position={[0, 0, -0.1]}>
-        {[-0.6, -0.4, -0.2, 0, 0.2, 0.4, 0.6].map((x, i) => (
-          <mesh key={`v-${i}`} position={[x, 0, 0]}>
-            <cylinderGeometry args={[0.002, 0.002, 0.28]} />
-            <meshStandardMaterial color="#444" metalness={1} roughness={0.2} />
-          </mesh>
-        ))}
-        {[-0.1, -0.05, 0, 0.05, 0.1].map((y, i) => (
-          <mesh key={`h-${i}`} position={[0, y, 0]} rotation={[0, 0, Math.PI / 2]}>
-            <cylinderGeometry args={[0.002, 0.002, 1.35]} />
-            <meshStandardMaterial color="#444" metalness={1} roughness={0.2} />
+      <mesh position={[0, 0, -0.1]}>
+        <boxGeometry args={[1.25, 0.25, 0.2]} />
+        <meshStandardMaterial color="#111" metalness={0.2} roughness={0.8} side={THREE.BackSide} />
+      </mesh>
+
+      <group position={[0, 0, -0.15]}>
+        {[-0.1, 0, 0.1].map((y, i) => (
+          <mesh key={i} position={[0, y, 0]} rotation={[Math.PI / 2, 0, 0]}>
+            <planeGeometry args={[1.2, 0.2]} />
+            <meshStandardMaterial color="#333" metalness={1} roughness={0.3} wireframe />
           </mesh>
         ))}
       </group>
@@ -75,94 +86,132 @@ export function Oven({ position = [0, 0.22, 0.58] }: { position?: [number, numbe
       {ovenTask && (
         <pointLight
           ref={lightRef}
-          position={[0, 0, -0.05]}
-          color="#ff4400"
+          position={[0, 0.1, -0.1]}
+          color="#ff6600"
           intensity={0}
           distance={1.5}
-          decay={2}
+          decay={1.5}
         />
       )}
 
-      <group position={[0, 0.18, 0]}>
+      <group position={[0, 0.23, 0]}>
         <mesh>
-          <boxGeometry args={[1.4, 0.06, 0.02]} />
-          <meshStandardMaterial color="#1a1a1a" metalness={0.8} roughness={0.2} />
+          <boxGeometry args={[1.5, 0.08, 0.1]} />
+          <meshStandardMaterial color="#1a1a1a" metalness={0.9} roughness={0.1} />
         </mesh>
-        <group position={[-0.5, 0, 0.011]}>
+        
+        <group position={[-0.45, 0, 0.051]}>
           <mesh>
-            <planeGeometry args={[0.15, 0.04]} />
+            <planeGeometry args={[0.25, 0.05]} />
+            <meshBasicMaterial color="#000" />
+          </mesh>
+          <Text
+            position={[0, 0, 0.001]}
+            fontSize={0.035}
+            color={ovenTask ? "#ff4400" : "#00ff00"}
+            anchorX="center"
+          >
+            {ovenTask ? "375\u00B0F" : "READY"}
+          </Text>
+        </group>
+
+        <group position={[-0.15, 0, 0.051]}>
+          <mesh>
+            <planeGeometry args={[0.2, 0.05]} />
             <meshBasicMaterial color="#000" />
           </mesh>
           <Text
             position={[0, 0, 0.001]}
             fontSize={0.03}
-            color={ovenTask ? "#ff4400" : "#333"}
+            color="#ffcc00"
           >
             {new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit', hour12: false })}
           </Text>
         </group>
+
         {[0.3, 0.4, 0.5, 0.6].map((x, i) => (
-          <mesh key={i} position={[x, 0, 0.011]} rotation={[Math.PI / 2, 0, 0]}>
-            <cylinderGeometry args={[0.01, 0.01, 0.005, 16]} />
-            <meshStandardMaterial color="#333" metalness={1} roughness={0.1} />
-          </mesh>
+          <group key={i} position={[x, 0, 0.05]}>
+            <mesh rotation={[Math.PI / 2, 0, 0]}>
+              <cylinderGeometry args={[0.02, 0.02, 0.02, 32]} />
+              <meshStandardMaterial color="#333" metalness={1} roughness={0.1} />
+            </mesh>
+            <mesh position={[0, 0, 0.015]} rotation={[Math.PI / 2, 0, 0]}>
+              <boxGeometry args={[0.005, 0.02, 0.03]} />
+              <meshStandardMaterial color="#888" metalness={1} roughness={0.1} />
+            </mesh>
+          </group>
         ))}
       </group>
 
-      <RoundedBox args={[1.4, 0.3, 0.02]} radius={0.01} smoothness={4}>
+      <RoundedBox args={[1.45, 0.35, 0.04]} radius={0.01} smoothness={4} position={[0, 0.02, 0]}>
         <meshStandardMaterial color="#222" metalness={0.9} roughness={0.1} />
       </RoundedBox>
 
-      <mesh position={[0, 0, 0.01]}>
-        <boxGeometry args={[1.2, 0.2, 0.005]} />
+      <mesh position={[0, 0.02, 0.02]}>
+        <boxGeometry args={[1.2, 0.22, 0.01]} />
         <meshPhysicalMaterial
           ref={glassRef}
-          transmission={1}
-          thickness={0.1}
-          roughness={0}
-          envMapIntensity={2.0}
+          transmission={0.95}
+          thickness={0.05}
+          roughness={0.05}
+          envMapIntensity={2.5}
           clearcoat={1}
-          color="#222"
+          color="#111"
           emissive="#ff4400"
           emissiveIntensity={0}
         />
       </mesh>
 
-      <group position={[0, 0.1, 0.03]}>
-        <mesh position={[-0.5, 0, -0.01]} rotation={[Math.PI / 2, 0, 0]}>
-          <cylinderGeometry args={[0.008, 0.008, 0.02, 16]} />
-          <meshStandardMaterial color="#888" metalness={1} roughness={0.1} />
+      <group position={[0, 0.14, 0.06]}>
+        <mesh position={[-0.55, 0, -0.02]} rotation={[Math.PI / 2, 0, 0]}>
+          <cylinderGeometry args={[0.015, 0.015, 0.04, 16]} />
+          <meshStandardMaterial color="#666" metalness={1} roughness={0.2} />
         </mesh>
-        <mesh position={[0.5, 0, -0.01]} rotation={[Math.PI / 2, 0, 0]}>
-          <cylinderGeometry args={[0.008, 0.008, 0.02, 16]} />
-          <meshStandardMaterial color="#888" metalness={1} roughness={0.1} />
+        <mesh position={[0.55, 0, -0.02]} rotation={[Math.PI / 2, 0, 0]}>
+          <cylinderGeometry args={[0.015, 0.015, 0.04, 16]} />
+          <meshStandardMaterial color="#666" metalness={1} roughness={0.2} />
         </mesh>
         <mesh rotation={[0, 0, Math.PI / 2]}>
-          <cylinderGeometry args={[0.01, 0.01, 1.1, 16]} />
-          <meshStandardMaterial color="#aaa" metalness={1} roughness={0.05} />
+          <cylinderGeometry args={[0.018, 0.018, 1.2, 32]} />
+          <meshStandardMaterial color="#aaa" metalness={1} roughness={0.1} />
         </mesh>
       </group>
 
+      <group position={[0, -0.18, 0.01]}>
+        {[-0.6, -0.4, -0.2, 0, 0.2, 0.4, 0.6].map((x, i) => (
+          <mesh key={i} position={[x, 0, 0]}>
+            <boxGeometry args={[0.1, 0.005, 0.01]} />
+            <meshStandardMaterial color="#000" />
+          </mesh>
+        ))}
+      </group>
+
       {ovenTask && (
-        <Html position={[0.5, 0, 0.05]} center>
+        <Html position={[0.55, 0, 0.08]} center>
           <div
             className={`timer-hud ${isReady ? 'critical' : ''}`}
-            onClick={() => completeTask(ovenTask.id)}
+            onClick={(e) => {
+              e.stopPropagation()
+              completeTask(ovenTask.id)
+            }}
             style={{
               cursor: 'pointer',
               pointerEvents: 'auto',
-              background: 'rgba(0, 0, 0, 0.85)',
-              border: `1px solid ${isReady ? '#ff0000' : '#ff4400'}`,
-              padding: '4px 8px',
-              borderRadius: '2px',
+              background: 'rgba(0, 0, 0, 0.9)',
+              border: `2px solid ${isReady ? '#ff0000' : '#ff6600'}`,
+              padding: '6px 12px',
+              borderRadius: '4px',
               fontFamily: 'monospace',
-              color: isReady ? '#ff0000' : '#ff4400',
-              boxShadow: ovenTask ? '0 0 15px rgba(255, 68, 0, 0.3)' : 'none',
-              transition: 'all 0.2s ease'
+              color: isReady ? '#ff0000' : '#ff6600',
+              boxShadow: isReady ? '0 0 20px rgba(255, 0, 0, 0.4)' : '0 0 15px rgba(255, 102, 0, 0.3)',
+              transition: 'all 0.2s ease',
+              textAlign: 'center',
+              minWidth: '120px'
             }}
           >
-            <div style={{ fontSize: '9px', textTransform: 'uppercase', opacity: 0.8 }}>{ovenTask.title}</div>
-            <div style={{ fontSize: '14px', fontWeight: 'bold' }}>{isReady ? 'READY' : formatTime(timeRemaining)}</div>
+            <div style={{ fontSize: '10px', textTransform: 'uppercase', opacity: 0.8, letterSpacing: '1px' }}>{ovenTask.title}</div>
+            <div style={{ fontSize: '18px', fontWeight: 'bold', margin: '2px 0' }}>{isReady ? 'DONE' : formatTime(timeRemaining)}</div>
+            <div style={{ fontSize: '8px', color: '#fff', opacity: 0.5 }}>CLICK TO REMOVE</div>
           </div>
         </Html>
       )}
